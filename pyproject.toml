@@ -1,0 +1,30 @@
+[project]
+name = "marketmetrics"
+version = "0.1.0"
+description = "A Python application for technical stock market analysis."
+authors = [
+    { name = "keisku", email = "keisuke.umegaki.630@gmail.com" }
+]
+dependencies = [
+    "yfinance>=0.2.49",
+    "matplotlib>=3.9.2",
+    "ruff>=0.7.4",
+]
+readme = "README.md"
+requires-python = ">= 3.11"
+
+[project.scripts]
+"marketmetrics" = "marketmetrics:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/marketmetrics"]
