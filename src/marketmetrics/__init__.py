@@ -6,24 +6,7 @@ import signal
 import sys
 import pandas as pd
 from .config import config_from_dialog, Config
-
-
-def calculate_rsi(prices, window=14):
-    delta = prices.diff()
-    gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
-    loss = (-delta.where(delta < 0, 0)).rolling(window=window).mean()
-
-    rs = gain / loss
-    rsi = 100 - (100 / (1 + rs))
-    return rsi
-
-
-def calculate_macd(prices, short_window=12, long_window=26, signal_window=9):
-    short_ema = prices.ewm(span=short_window, adjust=False).mean()
-    long_ema = prices.ewm(span=long_window, adjust=False).mean()
-    macd = short_ema - long_ema
-    signal = macd.ewm(span=signal_window, adjust=False).mean()
-    return macd, signal
+from .calculator import calculate_rsi, calculate_macd
 
 
 def plot_stock_data(
@@ -36,7 +19,7 @@ def plot_stock_data(
 ):
     company = yf.Ticker(symbol)
     company_history = company.history(interval="1d", start=start, end=end)
-    company_close_prices = company_history["Close"]
+    company_close_prices: pd.Series = company_history["Close"]
     company_volume = company_history["Volume"]
 
     short_ma = company_close_prices.rolling(window=short_window).mean()
