@@ -13,12 +13,13 @@ Market Metrics is a Python application for technical stock market analysis. It a
   - Fibonacci Retracement Levels
   - Mark Golden Crosses and Death Crosses
 
-## Usage
+## Installation
+
+## From Source
 
 1. Install [rye](https://rye.astral.sh/guide/installation/)
 2. `rye sync`
 3. `rye run marketmetrics`
-4. Dialog will prompt you to enter a stock symbol.
 
 ## Contributing
 
