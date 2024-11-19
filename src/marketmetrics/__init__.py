@@ -260,13 +260,11 @@ def plot_stock_data(
     plt.show(block=False)
 
 
-def signal_handler(_sig, _frame):
-    print("\nstock_analyzer is closing...")
-    plt.close("all")
-    sys.exit(0)
-
-
 def main() -> int:
+    def signal_handler(_sig, _frame):
+        plt.close("all")
+        sys.exit(0)
+
     signal.signal(signal.SIGINT, signal_handler)
 
     parser = argparse.ArgumentParser(
