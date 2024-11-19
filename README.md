@@ -23,4 +23,5 @@ Market Metrics is a Python application for technical stock market analysis. It a
 ## Contributing
 
 - `rye test` for run pytest.
-- `rye run ruff format` for format code.
+- `rye fmt` for format code.
+- `rye lint` for linting code.
