@@ -177,16 +177,16 @@ def plot_stock_data(
     )
     volume_ax.plot(
         company_history.index,
-        company_volume.rolling(window=short_window).mean(),
-        label=f"{short_window} day Volume MA",
+        company_volume.rolling(window=5).mean(),
+        label="5 day Volume MA",
         color="blue",
         linestyle="dashed",
         linewidth=1,
     )
     volume_ax.plot(
         company_history.index,
-        company_volume.rolling(window=long_window).mean(),
-        label=f"{long_window} day Volume MA",
+        company_volume.rolling(window=50).mean(),
+        label="50 day Volume MA",
         color="red",
         linestyle="dashed",
         linewidth=1,
