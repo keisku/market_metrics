@@ -61,8 +61,6 @@ pytz==2024.2
     # via yfinance
 requests==2.32.3
     # via yfinance
-ruff==0.7.4
-    # via marketmetrics
 six==1.16.0
     # via html5lib
     # via python-dateutil
