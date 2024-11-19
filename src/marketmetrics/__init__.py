@@ -279,14 +279,12 @@ def main() -> int:
     parser.add_argument(
         "--short",
         type=int,
-        nargs="+",
-        help="Short window for moving average. E.g., 20 50",
+        help="Short window for moving average. E.g., 20, 50",
     )
     parser.add_argument(
         "--long",
         type=int,
-        nargs="+",
-        help="Long window for moving average. E.g., 100 200",
+        help="Long window for moving average. E.g., 100, 200",
     )
     parser.add_argument("--debug", type=bool, help="Enable debug mode", default=False)
     args = parser.parse_args()
