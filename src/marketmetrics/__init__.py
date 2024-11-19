@@ -49,34 +49,34 @@ def plot_stock_data(
     ]
 
     fig = plt.figure(figsize=(12, 24))
-    ax1 = fig.add_subplot(6, 1, (1, 3))
-    ax2 = fig.add_subplot(6, 1, 4)
-    ax3 = fig.add_subplot(6, 1, 5)
-    ax4 = fig.add_subplot(6, 1, 6)
+    main_ax = fig.add_subplot(6, 1, (1, 3))
+    rsi_ax = fig.add_subplot(6, 1, 4)
+    volume_ax = fig.add_subplot(6, 1, 5)
+    macd_ax = fig.add_subplot(6, 1, 6)
 
     # Plotting stock price, moving averages, and Bollinger Bands
-    ax1.plot(
+    main_ax.plot(
         company_history.index,
         short_ma,
         label=f"{short_window} day MA",
         color="blue",
         linewidth=1,
     )
-    ax1.plot(
+    main_ax.plot(
         company_history.index,
         long_ma,
         label=f"{long_window} day MA",
         color="red",
         linewidth=1,
     )
-    ax1.plot(
+    main_ax.plot(
         company_history.index,
         company_close_prices,
         label="Closing",
         color="dimgrey",
         linewidth=1,
     )
-    ax1.fill_between(
+    main_ax.fill_between(
         company_history.index,
         lower_band,
         upper_band,
@@ -84,7 +84,7 @@ def plot_stock_data(
         alpha=0.1,
         label="Bollinger Bands",
     )
-    ax1.scatter(
+    main_ax.scatter(
         company_history.index[golden_cross],
         company_close_prices[golden_cross],
         color="green",
@@ -92,7 +92,7 @@ def plot_stock_data(
         label="Golden Cross",
         edgecolors="black",
     )
-    ax1.scatter(
+    main_ax.scatter(
         company_history.index[death_cross],
         company_close_prices[death_cross],
         color="red",
@@ -102,7 +102,7 @@ def plot_stock_data(
     )
 
     # Scatter max, min, prices
-    ax1.scatter(
+    main_ax.scatter(
         max_dates,
         [max_price] * len(max_dates),
         color="gold",
@@ -110,7 +110,7 @@ def plot_stock_data(
         label="Max Price",
         edgecolors="black",
     )
-    ax1.scatter(
+    main_ax.scatter(
         min_dates,
         [min_price] * len(min_dates),
         color="crimson",
@@ -118,11 +118,11 @@ def plot_stock_data(
         label="Min Price",
         edgecolors="black",
     )
-    ax1.axhline(mean_price, color="green", linewidth=1, label="Mean Price")
+    main_ax.axhline(mean_price, color="green", linewidth=1, label="Mean Price")
 
     # Plot Fibonacci retracement levels and add buy/sell signals
     for level, value in zip([0.236, 0.382, 0.5, 0.618, 0.786], fib_levels):
-        ax1.axhline(
+        main_ax.axhline(
             value,
             linestyle="dotted",
             color="purple",
@@ -132,7 +132,7 @@ def plot_stock_data(
         # Move the buy/sell signals slightly to the right for better visibility
         signal_date = company_history.index[-1] + pd.Timedelta(days=10)
         if company_close_prices.iloc[-1] > value:
-            ax1.scatter(
+            main_ax.scatter(
                 signal_date,
                 value,
                 color="green",
@@ -141,7 +141,7 @@ def plot_stock_data(
                 edgecolors="black",
             )
         elif company_close_prices.iloc[-1] < value:
-            ax1.scatter(
+            main_ax.scatter(
                 signal_date,
                 value,
                 color="red",
@@ -150,30 +150,32 @@ def plot_stock_data(
                 edgecolors="black",
             )
 
-    ax1.set_title(f"{symbol} | {short_window} / {long_window} day MA | {period}")
-    ax1.set_xlabel("Date")
-    ax1.set_ylabel("Price")
-    ax1.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
-    ax1.tick_params(axis="x", rotation=45)
-    ax1.legend()
-    ax1.grid(False)
+    main_ax.set_title(f"{symbol} | {short_window} / {long_window} day MA | {period}")
+    main_ax.set_xlabel("Date")
+    main_ax.set_ylabel("Price")
+    main_ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
+    main_ax.tick_params(axis="x", rotation=45)
+    main_ax.legend()
+    main_ax.grid(False)
 
     # Plotting RSI
-    ax2.plot(
+    rsi_ax.plot(
         company_history.index, rsi, label="RSI", color="cornflowerblue", linewidth=1
     )
-    ax2.axhline(70, color="tomato", linestyle="dotted", label="Overbought (70)")
-    ax2.axhline(30, color="forestgreen", linestyle="dotted", label="Oversold (30)")
-    ax2.set_xlabel("Date")
-    ax2.set_ylabel("RSI")
-    ax2.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
-    ax2.tick_params(axis="x", rotation=45)
-    ax2.legend()
-    ax2.grid(False)
+    rsi_ax.axhline(70, color="tomato", linestyle="dotted", label="Overbought (70)")
+    rsi_ax.axhline(30, color="forestgreen", linestyle="dotted", label="Oversold (30)")
+    rsi_ax.set_xlabel("Date")
+    rsi_ax.set_ylabel("RSI")
+    rsi_ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
+    rsi_ax.tick_params(axis="x", rotation=45)
+    rsi_ax.legend()
+    rsi_ax.grid(False)
 
     # Plotting Volume
-    ax3.bar(company_history.index, company_volume, color="darkgray", label="Volume")
-    ax3.plot(
+    volume_ax.bar(
+        company_history.index, company_volume, color="darkgray", label="Volume"
+    )
+    volume_ax.plot(
         company_history.index,
         company_volume.rolling(window=short_window).mean(),
         label=f"{short_window} day Volume MA",
@@ -181,7 +183,7 @@ def plot_stock_data(
         linestyle="dashed",
         linewidth=1,
     )
-    ax3.plot(
+    volume_ax.plot(
         company_history.index,
         company_volume.rolling(window=long_window).mean(),
         label=f"{long_window} day Volume MA",
@@ -189,23 +191,23 @@ def plot_stock_data(
         linestyle="dashed",
         linewidth=1,
     )
-    ax3.axhline(
+    volume_ax.axhline(
         company_volume.mean(),
         color="green",
         linestyle="dashed",
         linewidth=1,
         label="Mean Volume",
     )
-    ax3.set_xlabel("Date")
-    ax3.set_ylabel("Volume")
-    ax3.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
-    ax3.tick_params(axis="x", rotation=45)
-    ax3.legend()
-    ax3.grid(False)
+    volume_ax.set_xlabel("Date")
+    volume_ax.set_ylabel("Volume")
+    volume_ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
+    volume_ax.tick_params(axis="x", rotation=45)
+    volume_ax.legend()
+    volume_ax.grid(False)
 
     # Plotting MACD
-    ax4.plot(company_history.index, macd, label="MACD", color="blue", linewidth=1)
-    ax4.plot(
+    macd_ax.plot(company_history.index, macd, label="MACD", color="blue", linewidth=1)
+    macd_ax.plot(
         company_history.index,
         signal_line,
         label="Signal Line",
@@ -215,7 +217,7 @@ def plot_stock_data(
     )
     golden_cross_macd = (macd.shift(1) < signal_line.shift(1)) & (macd > signal_line)
     death_cross_macd = (macd.shift(1) > signal_line.shift(1)) & (macd < signal_line)
-    ax4.scatter(
+    macd_ax.scatter(
         company_history.index[golden_cross_macd],
         macd[golden_cross_macd],
         color="green",
@@ -223,7 +225,7 @@ def plot_stock_data(
         label="MACD Golden Cross",
         edgecolors="black",
     )
-    ax4.scatter(
+    macd_ax.scatter(
         company_history.index[death_cross_macd],
         macd[death_cross_macd],
         color="red",
@@ -231,17 +233,17 @@ def plot_stock_data(
         label="MACD Death Cross",
         edgecolors="black",
     )
-    ax4.axhline(5, color="gray", linestyle="dotted", linewidth=0.5)
+    macd_ax.axhline(5, color="gray", linestyle="dotted", linewidth=0.5)
     # Add horizontal lines at intervals of 5, starting from 10, only if the MACD value exceeds the previous threshold
     for value in range(10, 55, 5):
         if macd.max() > value - 5:
-            ax4.axhline(value, color="gray", linestyle="dotted", linewidth=0.5)
-    ax4.set_xlabel("Date")
-    ax4.set_ylabel("MACD")
-    ax4.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
-    ax4.tick_params(axis="x", rotation=45)
-    ax4.legend()
-    ax4.grid(False)
+            macd_ax.axhline(value, color="gray", linestyle="dotted", linewidth=0.5)
+    macd_ax.set_xlabel("Date")
+    macd_ax.set_ylabel("MACD")
+    macd_ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
+    macd_ax.tick_params(axis="x", rotation=45)
+    macd_ax.legend()
+    macd_ax.grid(False)
 
     # Adding hover functionality
     def format_coord(x, y):
@@ -251,10 +253,10 @@ def plot_stock_data(
         except ValueError:
             return f"Date: {x:.2f}, Value: {y:.2f}"
 
-    ax1.format_coord = format_coord
-    ax2.format_coord = format_coord
-    ax3.format_coord = format_coord
-    ax4.format_coord = format_coord
+    main_ax.format_coord = format_coord
+    rsi_ax.format_coord = format_coord
+    volume_ax.format_coord = format_coord
+    macd_ax.format_coord = format_coord
 
     plt.tight_layout()
     plt.show(block=False)
