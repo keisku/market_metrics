@@ -5,6 +5,7 @@ import matplotlib.dates as mdates
 import signal
 import sys
 import pandas as pd
+from .config import config_from_dialog, Config
 
 
 def calculate_rsi(prices, window=14):
@@ -25,9 +26,16 @@ def calculate_macd(prices, short_window=12, long_window=26, signal_window=9):
     return macd, signal
 
 
-def plot_stock_data(symbol, period, short_window, long_window):
+def plot_stock_data(
+    symbol: str,
+    period: str,
+    start: str,
+    end: str,
+    short_window: int,
+    long_window: int,
+):
     company = yf.Ticker(symbol)
-    company_history = company.history(period=period, interval="1d")
+    company_history = company.history(interval="1d", start=start, end=end)
     company_close_prices = company_history["Close"]
     company_volume = company_history["Volume"]
 
@@ -281,28 +289,23 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Market Metrics: A Python application for technical stock market analysis."
     )
-    parser.add_argument(
-        "--symbols", type=str, nargs="+", help="E.g., DDOG MSFT VOO", required=True
-    )
+    parser.add_argument("--symbols", type=str, nargs="+", help="E.g., DDOG MSFT VOO")
     parser.add_argument(
         "--period",
         type=str,
         help="1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max",
-        default="1y",
     )
     parser.add_argument(
         "--short",
         type=int,
         nargs="+",
         help="Short window for moving average. E.g., 20 50",
-        default=20,
     )
     parser.add_argument(
         "--long",
         type=int,
         nargs="+",
         help="Long window for moving average. E.g., 100 200",
-        default=100,
     )
     parser.add_argument("--debug", type=bool, help="Enable debug mode", default=False)
     args = parser.parse_args()
@@ -310,9 +313,17 @@ def main() -> int:
     if args.debug:
         yf.enable_debug_mode()
 
-    for symbol in args.symbols:
-        for short, long in zip(args.short, args.long):
-            plot_stock_data(symbol, args.period, short, long)
+    if args.symbols and args.period and args.short and args.long:
+        config = Config(
+            symbols=args.symbols, period=args.period, short=args.short, long=args.long
+        )
+    else:
+        config = config_from_dialog()
+
+    for symbol in config.symbols:
+        plot_stock_data(
+            symbol, config.period, config.start, config.end, config.short, config.long
+        )
 
     plt.show()
     return 0
