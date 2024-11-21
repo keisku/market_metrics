@@ -14,6 +14,7 @@ class Config:
     long: int
     start: Optional[str] = field(init=False, default=None)
     end: Optional[str] = field(init=False, default=None)
+    figsize: tuple
 
     def __post_init__(self):
         self.end = datetime.now().strftime("%Y-%m-%d")
@@ -67,5 +68,5 @@ def config_from_dialog() -> Config:
         "Input", "Enter long moving average window:", initialvalue=200
     )
     return Config(
-        symbols=symbols.split(), period=period, short=short_window, long=long_window
+        symbols=symbols.split(), period=period, short=short_window, long=long_window, figsize=(16, 16)
     )
