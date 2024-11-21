@@ -307,19 +307,6 @@ def plot_stock_data(
         ],
     )
 
-    # Adding hover functionality
-    def format_coord(x, y):
-        try:
-            date = mdates.num2date(x).strftime("%Y-%m-%d")
-            return f"Date: {date}, Value: {y:.2f}"
-        except ValueError:
-            return f"Date: {x:.2f}, Value: {y:.2f}"
-
-    main_ax.format_coord = format_coord
-    rsi_ax.format_coord = format_coord
-    volume_ax.format_coord = format_coord
-    macd_ax.format_coord = format_coord
-
     plt.tight_layout()
     plt.show(block=False)
 
