@@ -17,6 +17,7 @@ def plot_stock_data(
     end: str,
     short_window: int,
     long_window: int,
+    figsize: tuple,
 ):
     company = yf.Ticker(symbol)
     company_history = company.history(interval="1d", start=start, end=end)
@@ -49,7 +50,7 @@ def plot_stock_data(
         for level in [0.236, 0.382, 0.5, 0.618, 0.786]
     ]
 
-    fig = plt.figure(figsize=(12, 24))
+    fig = plt.figure(figsize=figsize)
     main_ax = fig.add_subplot(6, 1, (1, 3))
     rsi_ax = fig.add_subplot(6, 1, 4)
     volume_ax = fig.add_subplot(6, 1, 5)
@@ -337,6 +338,13 @@ def main() -> int:
         type=int,
         help="Long window for moving average. E.g., 100, 200",
     )
+    parser.add_argument(
+        "--figsize",
+        type=int,
+        nargs=2,
+        help="Figure size in inches. E.g., 16 16",
+        default=(16, 16),
+    )
     parser.add_argument("--debug", type=bool, help="Enable debug mode", default=False)
     args = parser.parse_args()
 
@@ -345,14 +353,24 @@ def main() -> int:
 
     if args.symbols and args.period and args.short and args.long:
         config = Config(
-            symbols=args.symbols, period=args.period, short=args.short, long=args.long
+            symbols=args.symbols,
+            period=args.period,
+            short=args.short,
+            long=args.long,
+            figsize=args.figsize,
         )
     else:
         config = config_from_dialog()
 
     for symbol in config.symbols:
         plot_stock_data(
-            symbol, config.period, config.start, config.end, config.short, config.long
+            symbol,
+            config.period,
+            config.start,
+            config.end,
+            config.short,
+            config.long,
+            figsize=config.figsize,
         )
 
     plt.show()
