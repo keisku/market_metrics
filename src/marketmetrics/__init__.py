@@ -70,7 +70,7 @@ def plot_stock_data(
         color="red",
         linewidth=1,
     )
-    main_ax.plot(
+    main_closing_line = main_ax.plot(
         company_history.index,
         company_close_prices,
         label="Closing",
@@ -101,8 +101,6 @@ def plot_stock_data(
         label="Death Cross",
         edgecolors="black",
     )
-
-    # Scatter max, min, prices
     main_ax.scatter(
         max_dates,
         [max_price] * len(max_dates),
@@ -158,6 +156,18 @@ def plot_stock_data(
     main_ax.tick_params(axis="x", rotation=45)
     main_ax.legend()
     main_ax.grid(False)
+    main_closing_cursor = mplcursors.cursor(main_closing_line, hover=True)
+    main_closing_cursor.connect(
+        event="add",
+        func=lambda sel: [
+            sel.annotation.set_text(
+                f"{mdates.num2date(sel.target[0]).strftime('%Y-%m-%d')} : {sel.target[1]:.2f}"
+            ),
+            sel.annotation.set_bbox(
+                dict(boxstyle="round,pad=0.3", edgecolor="black", facecolor="white")
+            ),
+        ],
+    )
 
     # Plotting RSI
     rsi_line = rsi_ax.plot(
@@ -198,7 +208,7 @@ def plot_stock_data(
     )
 
     # Plotting Volume
-    volume_ax.bar(
+    volume_line = volume_ax.bar(
         company_history.index, company_volume, color="darkgray", label="Volume"
     )
     volume_ax.plot(
@@ -230,9 +240,23 @@ def plot_stock_data(
     volume_ax.tick_params(axis="x", rotation=45)
     volume_ax.legend()
     volume_ax.grid(False)
+    volume_cursor = mplcursors.cursor(volume_line, hover=True)
+    volume_cursor.connect(
+        event="add",
+        func=lambda sel: [
+            sel.annotation.set_text(
+                f"{mdates.num2date(sel.target[0]).strftime('%Y-%m-%d')} : {sel.target[1]:.2f}"
+            ),
+            sel.annotation.set_bbox(
+                dict(boxstyle="round,pad=0.3", edgecolor="black", facecolor="white")
+            ),
+        ],
+    )
 
     # Plotting MACD
-    macd_ax.plot(company_history.index, macd, label="MACD", color="blue", linewidth=1)
+    macd_line = macd_ax.plot(
+        company_history.index, macd, label="MACD", color="blue", linewidth=1
+    )
     macd_ax.plot(
         company_history.index,
         signal_line,
@@ -270,6 +294,18 @@ def plot_stock_data(
     macd_ax.tick_params(axis="x", rotation=45)
     macd_ax.legend()
     macd_ax.grid(False)
+    macd_cursor = mplcursors.cursor(macd_line, hover=True)
+    macd_cursor.connect(
+        event="add",
+        func=lambda sel: [
+            sel.annotation.set_text(
+                f"{mdates.num2date(sel.target[0]).strftime('%Y-%m-%d')} : {sel.target[1]:.2f}"
+            ),
+            sel.annotation.set_bbox(
+                dict(boxstyle="round,pad=0.3", edgecolor="black", facecolor="white")
+            ),
+        ],
+    )
 
     # Adding hover functionality
     def format_coord(x, y):
