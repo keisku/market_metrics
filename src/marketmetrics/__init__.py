@@ -2,6 +2,7 @@ import argparse
 import yfinance as yf
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import mplcursors
 import signal
 import sys
 import pandas as pd
@@ -159,8 +160,12 @@ def plot_stock_data(
     main_ax.grid(False)
 
     # Plotting RSI
-    rsi_ax.plot(
-        company_history.index, rsi, label="RSI", color="cornflowerblue", linewidth=1
+    rsi_line = rsi_ax.plot(
+        company_history.index,
+        rsi,
+        label="Relative Strength Index (RSI)",
+        color="cornflowerblue",
+        linewidth=1,
     )
     rsi_ax.axhline(70, color="tomato", linestyle="dotted", label="Overbought (70)")
     rsi_ax.axhline(30, color="forestgreen", linestyle="dotted", label="Oversold (30)")
@@ -170,6 +175,27 @@ def plot_stock_data(
     rsi_ax.tick_params(axis="x", rotation=45)
     rsi_ax.legend()
     rsi_ax.grid(False)
+    rsi_cursor = mplcursors.cursor(rsi_line, hover=True)
+    rsi_cursor.connect(
+        event="add",
+        func=lambda sel: [
+            sel.annotation.set_text(
+                f"{mdates.num2date(sel.target[0]).strftime('%Y-%m-%d')} : {sel.target[1]:.2f}"
+            ),
+            sel.annotation.set_bbox(
+                dict(boxstyle="round,pad=0.3", edgecolor="black", facecolor="white")
+            ),
+            sel.annotation.update(
+                {
+                    "color": "forestgreen"
+                    if sel.target[1] <= 30
+                    else "tomato"
+                    if sel.target[1] >= 70
+                    else "cornflowerblue"
+                }
+            ),
+        ],
+    )
 
     # Plotting Volume
     volume_ax.bar(
