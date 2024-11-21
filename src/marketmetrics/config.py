@@ -68,5 +68,9 @@ def config_from_dialog() -> Config:
         "Input", "Enter long moving average window:", initialvalue=200
     )
     return Config(
-        symbols=symbols.split(), period=period, short=short_window, long=long_window, figsize=(16, 16)
+        symbols=symbols.split(),
+        period=period,
+        short=short_window,
+        long=long_window,
+        figsize=(16, 16),
     )

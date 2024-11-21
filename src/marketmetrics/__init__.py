@@ -353,14 +353,24 @@ def main() -> int:
 
     if args.symbols and args.period and args.short and args.long:
         config = Config(
-            symbols=args.symbols, period=args.period, short=args.short, long=args.long, figsize=args.figsize
+            symbols=args.symbols,
+            period=args.period,
+            short=args.short,
+            long=args.long,
+            figsize=args.figsize,
         )
     else:
         config = config_from_dialog()
 
     for symbol in config.symbols:
         plot_stock_data(
-            symbol, config.period, config.start, config.end, config.short, config.long, figsize=config.figsize
+            symbol,
+            config.period,
+            config.start,
+            config.end,
+            config.short,
+            config.long,
+            figsize=config.figsize,
         )
 
     plt.show()
