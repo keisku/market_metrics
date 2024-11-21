@@ -254,7 +254,9 @@ def plot_stock_data(
     )
 
     # Plotting MACD
-    macd_line = macd_ax.plot(company_history.index, macd, label="MACD", color="blue", linewidth=1)
+    macd_line = macd_ax.plot(
+        company_history.index, macd, label="MACD", color="blue", linewidth=1
+    )
     macd_ax.plot(
         company_history.index,
         signal_line,
