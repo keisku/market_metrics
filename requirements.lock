@@ -34,6 +34,9 @@ lxml==5.3.0
     # via yfinance
 matplotlib==3.9.2
     # via marketmetrics
+    # via mplcursors
+mplcursors==0.6
+    # via marketmetrics
 multitasking==0.0.11
     # via yfinance
 numpy==2.1.3

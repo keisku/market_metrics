@@ -8,6 +8,7 @@ authors = [
 dependencies = [
     "yfinance>=0.2.49",
     "matplotlib>=3.9.2",
+    "mplcursors>=0.6",
 ]
 readme = "README.md"
 requires-python = ">= 3.11"
