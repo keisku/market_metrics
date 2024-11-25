@@ -32,15 +32,17 @@ from .config import Config
     ],
 )
 def test_config_start_date(symbols, period, short, long, expected_start):
-    config = Config(symbols=symbols, period=period, short=short, long=long)
+    config = Config(
+        symbols=symbols, period=period, short=short, long=long, figsize=(10, 10)
+    )
     assert config.start == expected_start
 
 
 def test_invalid_period():
     with pytest.raises(ValueError, match="Invalid period format: invalid"):
-        Config(symbols=["TEST"], period="invalid", short=20, long=100)
+        Config(symbols=["TEST"], period="invalid", short=20, long=100, figsize=(10, 10))
 
 
 def test_unknown_time_unit():
     with pytest.raises(ValueError, match="Invalid period format: 5w"):
-        Config(symbols=["TEST"], period="5w", short=20, long=100)
+        Config(symbols=["TEST"], period="5w", short=20, long=100, figsize=(10, 10))
