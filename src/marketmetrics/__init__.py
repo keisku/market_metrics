@@ -6,13 +6,20 @@ import mplcursors
 import signal
 import sys
 import pandas as pd
+import numpy as np
 from .config import config_from_dialog, Config
 from .calculator import calculate_rsi, calculate_macd
+
+
+TRADING_DAYS_IN_YEAR = 252
+NA_ANNUAL_VOLATILITY = 0.0
+YEAR_IN_DAYS = 365
 
 
 def plot_stock_data(
     symbol: str,
     period: str,
+    period_in_days: int,
     start: str,
     end: str,
     short_window: int,
@@ -23,6 +30,11 @@ def plot_stock_data(
     company_history = company.history(interval="1d", start=start, end=end)
     company_close_prices: pd.Series = company_history["Close"]
     company_volume = company_history["Volume"]
+
+    daily_volatility = company_close_prices.pct_change().std()
+    annual_volatility = NA_ANNUAL_VOLATILITY
+    if period_in_days >= YEAR_IN_DAYS:
+        annual_volatility = daily_volatility * np.sqrt(TRADING_DAYS_IN_YEAR)
 
     short_ma = company_close_prices.rolling(window=short_window).mean()
     long_ma = company_close_prices.rolling(window=long_window).mean()
@@ -150,7 +162,13 @@ def plot_stock_data(
                 edgecolors="black",
             )
 
-    main_ax.set_title(f"{symbol} | {short_window} / {long_window} day MA | {period}")
+    base_title = f"{symbol} | {short_window} / {long_window} day MA | {period}"
+    if annual_volatility == NA_ANNUAL_VOLATILITY:
+        main_ax.set_title(f"{base_title} | Daily Volatility {daily_volatility:.4f}")
+    else:
+        main_ax.set_title(
+            f"{base_title} | Volatility Daily {daily_volatility * 100:.2f}% Annual {annual_volatility * 100:.2f}%"
+        )
     main_ax.set_xlabel("Date")
     main_ax.set_ylabel("Price")
     main_ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
@@ -366,6 +384,7 @@ def main() -> int:
         plot_stock_data(
             symbol,
             config.period,
+            config.period_in_days,
             config.start,
             config.end,
             config.short,

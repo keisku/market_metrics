@@ -46,3 +46,21 @@ def test_invalid_period():
 def test_unknown_time_unit():
     with pytest.raises(ValueError, match="Invalid period format: 5w"):
         Config(symbols=["TEST"], period="5w", short=20, long=100, figsize=(10, 10))
+
+
+@pytest.mark.parametrize(
+    "period, expected_period_in_days",
+    [
+        ("2d", 2),
+        ("3m", 90),
+        ("1y", 365),
+        ("3y", 3 * 365),
+        ("5y", 5 * 365),
+        ("10y", 10 * 365),
+    ],
+)
+def test_config_delta_days(period, expected_period_in_days):
+    config = Config(
+        symbols=["TEST"], period=period, short=20, long=100, figsize=(10, 10)
+    )
+    assert config.period_in_days == expected_period_in_days
