@@ -10,6 +10,7 @@ import re
 class Config:
     symbols: List[str]
     period: str
+    period_in_days: int = field(init=False, default=0)
     short: int
     long: int
     start: Optional[str] = field(init=False, default=None)
@@ -19,6 +20,10 @@ class Config:
     def __post_init__(self):
         self.end = datetime.now().strftime("%Y-%m-%d")
         self.start = self._calculate_start_date(self.period)
+        self.period_in_days = (
+            datetime.strptime(self.end, "%Y-%m-%d")
+            - datetime.strptime(self.start, "%Y-%m-%d")
+        ).days
 
     def _calculate_start_date(self, period: str) -> Optional[str]:
         current_date = datetime.now()
