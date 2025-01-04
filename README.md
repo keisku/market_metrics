@@ -2,7 +2,7 @@
 
 Market Metrics is a Python application for technical stock market analysis. It allows users to analyze stock data using various technical indicators and visualize the results.
 
-## Disclaimer
+## ⚠️DISCLAIMER⚠️
 
 Market Metrics is intended for educational and informational purposes only. It does not constitute financial advice or recommendations for any investment decisions. Users are encouraged to conduct their own research and consult with a certified financial advisor before making any trading or investment decisions.
 
