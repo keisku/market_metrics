@@ -10,13 +10,13 @@
 #   universal: false
 
 -e file:.
-asttokens==2.4.1
+asttokens==3.0.0
     # via icecream
 beautifulsoup4==4.12.3
     # via yfinance
-certifi==2024.8.30
+certifi==2024.12.14
     # via requests
-charset-normalizer==3.4.0
+charset-normalizer==3.4.1
     # via requests
 colorama==0.4.6
     # via icecream
@@ -26,7 +26,7 @@ cycler==0.12.1
     # via matplotlib
 executing==2.1.0
     # via icecream
-fonttools==4.55.0
+fonttools==4.55.3
     # via matplotlib
 frozendict==2.4.6
     # via yfinance
@@ -37,11 +37,11 @@ idna==3.10
     # via requests
 iniconfig==2.0.0
     # via pytest
-kiwisolver==1.4.7
+kiwisolver==1.4.8
     # via matplotlib
 lxml==5.3.0
     # via yfinance
-matplotlib==3.9.2
+matplotlib==3.10.0
     # via marketmetrics
     # via mplcursors
 mplcursors==0.6
@@ -61,7 +61,7 @@ pandas==2.2.3
     # via yfinance
 peewee==3.17.8
     # via yfinance
-pillow==11.0.0
+pillow==11.1.0
     # via matplotlib
 platformdirs==4.3.6
     # via yfinance
@@ -69,9 +69,9 @@ pluggy==1.5.0
     # via pytest
 pygments==2.18.0
     # via icecream
-pyparsing==3.2.0
+pyparsing==3.2.1
     # via matplotlib
-pytest==8.3.3
+pytest==8.3.4
 python-dateutil==2.9.0.post0
     # via matplotlib
     # via pandas
@@ -80,17 +80,16 @@ pytz==2024.2
     # via yfinance
 requests==2.32.3
     # via yfinance
-six==1.16.0
-    # via asttokens
+six==1.17.0
     # via html5lib
     # via python-dateutil
 soupsieve==2.6
     # via beautifulsoup4
 tzdata==2024.2
     # via pandas
-urllib3==2.2.3
+urllib3==2.3.0
     # via requests
 webencodings==0.5.1
     # via html5lib
-yfinance==0.2.49
+yfinance==0.2.51
     # via marketmetrics
